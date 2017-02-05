@@ -21,6 +21,8 @@ Kivy Mobil Programlama
    paketleme
    resimGosterici
    listeEylem
+   sekmeler
+.. sqltebrowser
 
 
 Dizinler ve Tablolar

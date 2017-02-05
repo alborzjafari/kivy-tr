@@ -1,0 +1,246 @@
+#:import _ main._
+
+<KivySQLite>:
+
+BoxLayout:
+    orientation: 'vertical'
+    pos_hint:  {'top':1}
+    
+    ActionBar:
+        ActionView:
+            ActionPrevious:
+                title: _('Kivy SQLite Database Browser')
+                with_previous: False
+                app_icon: 'icons/Misc-Database-3-icon.png'
+            ActionButton:
+                text: _('Open Database')
+                id: opendb_action_button
+                icon: 'icons/open_db.png'
+                on_press: app.fileOpenDialog()
+                 
+            ActionButton:
+                text: _('New Database')
+                id: savedb_action_button
+                icon: 'icons/new_db.png'
+            ActionButton:
+                text: _('Close Database')
+                id: closedb_action_button
+                icon: 'icons/close_db.png'
+                on_press: app.closeDB()
+            ActionButton:
+                text: _('Quit Application')
+                id: newdb_action_button
+                icon: 'icons/exit.png'
+                
+    TabbedPanel:
+        do_default_tab: False
+        tab_width: self.parent.width / 3
+        TabbedPanelItem:
+            text: _('Database Structure')
+            
+            BoxLayout:
+                
+                orientation: 'vertical'
+                BoxLayout:
+                    size_hint_y: 0.1
+                    orientation: 'horizontal'
+                    ActionButton:
+                        #text: _('New Table')
+                        id: new_table_action
+                        icon: 'icons/lc_dbnewtable.png'
+                        disabled: True
+                        on_press: app.newTableForm()
+                    
+                    ActionButton:
+                        #text: _('Modify Table')
+                        id: modify_table_action
+                        icon: 'icons/lc_dbdtableedit.png'
+                        disabled: True
+                        
+                    ActionButton:
+                        #text: _('Delete Table')
+                        id: delete_table_action
+                        icon: 'icons/lc_dbtabledelete.png'
+                        disabled: True
+                        on_press: app.deleteTableDialog()
+
+                ScrollView:
+                    TreeView:
+                        size_hint: 1, None
+                        hide_root: True
+                        indent_level: 4
+                        id: table_tree
+                        on_node_expand: app.tree_view_expanded()
+                        height: self.minimum_height
+                
+        TabbedPanelItem:
+            text: _('Browse Data')
+            BoxLayout:
+                Label:
+                    text: 'İkinci sekme'
+
+
+        TabbedPanelItem:
+            text: _('Execute SQL')
+            Image:
+                source: "kiwi.jpg"
+                allow_stretch: True
+                keep_ratio: False
+                
+                
+<fileOpenForm>:
+    title: "Dosya Aç"
+    size_hint: (.9, .9)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        FileChooserListView:
+            size_hint_y: 90
+            id: db_select
+            filters: ['*.*']
+            path: app.recent_path
+    
+        BoxLayout:
+            size_hint_y: 10            
+            Button:
+                text: _("Open")
+                on_press: app.openDB(db_select); root.dismiss()
+            Button:
+                text: _("Cancel")
+                on_press: root.dismiss()
+                
+                
+<ConfirmPopup>:
+    title: "Warning"
+    size_hint: (.7, .5)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        Label:
+            size_hint_y: .9
+            text: root.text
+            id: ask_user_text
+            markup: True   
+        BoxLayout:
+            size_hint_y: .1            
+            Button:
+                text: _("Yes")
+                
+                on_press: root.dispatch('on_answer','yes')
+                
+            Button:
+                text: _("No")
+                on_press: root.dispatch('on_answer','no')                
+                
+<newTableForm>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint_y: 0.1
+            text: _("Table Name:")
+        TextInput:
+
+            id: new_table_name
+            multiline: False
+            size_hint_y: 0.1
+
+        Label:
+            text: _("Fields:")
+            size_hint_y: 0.1
+
+        GridLayout:
+            size_hint_y: 0.5
+            cols: 6
+            rows: 10
+            id: table_fields
+            row_default_height: '32dp'
+            size_hint_y: None
+            height: self.minimum_height
+            
+
+            
+            
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1 
+            
+            ActionButton:
+                text: _('Add Field')
+                id: add_field_action
+                icon: 'icons/lc_addfield.png'
+                on_press: root.add_field()
+
+
+            ActionButton:
+                text: _('Add Field')
+                id: edit_field_action
+                icon: 'icons/lc_editprintarea.png'
+                on_press: root.edit_field()
+
+                
+                
+                
+            ActionButton:
+                text: _('Remove Field')
+                id: remove_field_action
+                icon: 'icons/lc_deleterows.png'
+                on_press: root.remove_field()
+
+        Button:
+            text: _("Create table")
+            size_hint_y: 0.1     
+
+
+<tableField>:
+
+    
+    orientation: 'vertical'
+    GridLayout:
+        cols: 2
+        Label:
+            text: _("Field Name:")
+        TextInput:
+            id: field_name
+            multiline: False
+
+        Label:
+            text: _("Field Type:")
+        Button:
+            id: field_type
+            text: _("Select Type")
+            on_release: root.dropdown.open(self)
+            size_hint_y: None
+            height: '48dp'
+
+        Label:
+            text: _("Not Null:")
+        CheckBox:
+            id: field_not
+            size: self.size
+            halign: 'left'
+             
+        Label:
+            text: _("Primary Key:")
+        CheckBox:
+            id: field_pk
+
+        Label:
+            text: _("Auto Increment:")
+        CheckBox:
+            id: field_ai                        
+        
+        Button:
+            text: _("OK")
+            id: field_ok_button
+            size_hint_y: .2
+            on_press: root.add_field()
+            
+        Button:
+            text: _("Cancel")
+            id: field_ok_button
+            on_press: root.dismiss()
+            
+            
+    
+                    
+                              

@@ -1,0 +1,126 @@
+#:import _ main._
+#:import ListItemButton kivy.uix.listview.ListItemButton
+#:import ListAdapter kivy.adapters.listadapter.ListAdapter
+
+<KivySQLite>:
+
+BoxLayout:
+    orientation: 'vertical'
+    pos_hint:  {'top':1}
+    
+    ActionBar:
+        ActionView:
+            ActionPrevious:
+                title: _('Kivy SQLite Database Browser')
+                with_previous: False
+                app_icon: 'icons/Misc-Database-3-icon.png'
+            ActionButton:
+                text: _('Open Database')
+                id: ac_eylem_dugmesi
+                icon: 'icons/database-arrow-right-icon.png'
+                on_press: app.fileOpenDialog()
+                 
+            ActionButton:
+                text: _('New Database')
+                id: kaydet_eylem_dugmesi
+                icon: 'icons/Misc-New-Database-icon.png'
+            ActionButton:
+                text: _('Close Database')
+                id: farklı_kaydet_eylem_dugmesi
+                icon: 'icons/Misc-Delete-Database-icon.png'
+            ActionButton:
+                text: _('Quit Application')
+                id: yeni_eylem_dugmesi
+                icon: 'icons/Actions-application-exit-icon.png'
+                
+    TabbedPanel:
+        do_default_tab: False
+        tab_width: self.parent.width / 3
+        TabbedPanelItem:
+            text: _('Database Structure')
+            
+            
+            BoxLayout:
+                
+                orientation: 'vertical'
+                BoxLayout:
+                    size_hint_y: .1
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'ahah'
+                    Label:
+                        text: 'ahah'
+                    Label:
+                        text: 'ahah'
+                        
+                
+                   
+                ListView:
+                    size_hint_y: .9
+                    size: 100,10000
+                    id: main_table_list
+                    adapter: ListAdapter(args_converter=app.argConverter, data=[{'name': u'django_migrations'}, {'name': u'sqlite_sequence'}, {'name': u'auth_group'}, {'name': u'auth_group_permissions'}, {'name': u'auth_user_groups'}, {'name': u'auth_user_user_permissions'}, {'name': u'django_admin_log'}, {'name': u'django_content_type'}, {'name': u'auth_permission'}, {'name': u'auth_user'}, {'name': u'django_session'}, {'name': u'video_video'}], cls=ListItemButton, allow_empty_selection=False)
+                            
+                
+                
+        TabbedPanelItem:
+            text: _('Browse Data')
+            BoxLayout:
+                Label:
+                    text: 'İkinci sekme'
+
+
+        TabbedPanelItem:
+            text: _('Execute SQL')
+            Image:
+                source: "kiwi.jpg"
+                allow_stretch: True
+                keep_ratio: False
+                
+                
+<fileOpenForm>:
+    title: "Dosya Aç"
+    size_hint: (.9, .9)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        FileChooserListView:
+            size_hint_y: 90
+            id: db_select
+            filters: ['*.*']
+            path: app.recent_path
+    
+        BoxLayout:
+            size_hint_y: 10            
+            Button:
+                text: _("Open")
+                on_press: app.openDB(db_select); root.dismiss()
+            Button:
+                text: _("Cancel")
+                on_press: root.dismiss()
+                
+                
+<ConfirmPopup>:
+    title: "Warning"
+    size_hint: (.7, .5)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        Label:
+            size_hint_y: .9
+            text: root.text
+            id: ask_user_text
+            markup: True   
+        BoxLayout:
+            size_hint_y: .1            
+            Button:
+                text: _("Yes")
+                
+                on_press: root.dispatch('on_answer','yes')
+                
+            Button:
+                text: _("No")
+                on_press: root.dispatch('on_answer','no')                
+                
+                
+                              

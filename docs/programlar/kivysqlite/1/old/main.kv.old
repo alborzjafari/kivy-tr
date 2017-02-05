@@ -1,0 +1,133 @@
+#:import _ main._
+
+<KivySQLite>:
+
+BoxLayout:
+    orientation: 'vertical'
+    pos_hint:  {'top':1}
+    
+    ActionBar:
+        ActionView:
+            ActionPrevious:
+                title: _('Kivy SQLite Database Browser')
+                with_previous: False
+                app_icon: 'icons/Misc-Database-3-icon.png'
+            ActionButton:
+                text: _('Open Database')
+                id: ac_eylem_dugmesi
+                icon: 'icons/database-arrow-right-icon.png'
+                on_press: app.fileOpenDialog()
+                 
+            ActionButton:
+                text: _('New Database')
+                id: kaydet_eylem_dugmesi
+                icon: 'icons/Misc-New-Database-icon.png'
+            ActionButton:
+                text: _('Close Database')
+                id: farklı_kaydet_eylem_dugmesi
+                icon: 'icons/Misc-Delete-Database-icon.png'
+            ActionButton:
+                text: _('Quit Application')
+                id: yeni_eylem_dugmesi
+                icon: 'icons/Actions-application-exit-icon.png'
+                
+    TabbedPanel:
+        do_default_tab: False
+        tab_width: self.parent.width / 3
+        TabbedPanelItem:
+            text: _('Database Structure')
+            
+            BoxLayout:
+                size_hint_y: 0.1
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    ActionButton:
+                        #text: _('New Table')
+                        id: new_table_action
+                        icon: 'icons/table-add-icon.png'
+                        disabled: True
+                    
+                    ActionButton:
+                        #text: _('Modify Table')
+                        id: modify_table_action
+                        icon: 'icons/table-edit-icon.png'
+                        disabled: True
+                        
+                    ActionButton:
+                        #text: _('Delete Table')
+                        id: delete_table_action
+                        icon: 'icons/table-remove-icon.png'
+                        disabled: True
+                        on_press: app.deleteTableDialog()
+                
+
+                TreeView:
+                    #size_hint_y: 0.9
+                    minimum_height:5000
+                    hide_root: True
+                    indent_level: 4
+                    id: table_tree
+                    on_node_expand: app.tree_view_expanded()
+                
+        TabbedPanelItem:
+            text: _('Browse Data')
+            BoxLayout:
+                Label:
+                    text: 'İkinci sekme'
+
+
+        TabbedPanelItem:
+            text: _('Execute SQL')
+            Image:
+                source: "kiwi.jpg"
+                allow_stretch: True
+                keep_ratio: False
+                
+                
+<fileOpenForm>:
+    title: "Dosya Aç"
+    size_hint: (.9, .9)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        FileChooserListView:
+            size_hint_y: 90
+            id: db_select
+            filters: ['*.*']
+            path: app.recent_path
+    
+        BoxLayout:
+            size_hint_y: 10            
+            Button:
+                text: _("Open")
+                on_press: app.openDB(db_select); root.dismiss()
+            Button:
+                text: _("Cancel")
+                on_press: root.dismiss()
+                
+                
+<ConfirmPopup>:
+    title: "Warning"
+    size_hint: (.7, .5)
+    BoxLayout:
+        orientation: 'vertical'
+        
+        Label:
+            size_hint_y: .9
+            text: root.text
+            id: ask_user_text
+            markup: True   
+        BoxLayout:
+            size_hint_y: .1            
+            Button:
+                text: _("Yes")
+                
+                on_press: root.dispatch('on_answer','yes')
+                
+            Button:
+                text: _("No")
+                on_press: root.dispatch('on_answer','no')                
+                
+                
+                              
