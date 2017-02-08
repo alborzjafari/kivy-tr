@@ -75,17 +75,60 @@ BoxLayout:
                 
         TabbedPanelItem:
             text: _('Browse Data')
+
             BoxLayout:
-                Label:
-                    text: 'İkinci sekme'
+                pos_hint:  {'top':1}
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: 0.1
+                    Button:
+                        id: browse_data_main_button
+                        text: _("Select Table")
+                        on_release: app.table_dropdown.open(self)
+                        size_hint_y: None
+                        size_hint_x:0.4
+                        height: '30dp'
+                    Label:
+                        text:'Filter'
+                        size_hint_x:0.1
+
+                    TextInput:
+                        id: data_filter
+                        multiline: False
+                        size_hint: None, None
+                        size: 300, 30
+                        
+                        
+                ScrollView:
+                    
+                    size_hint: 1,1
+                    GridLayout:
+                        size_hint:None,None
+                        rows: 21
+                        height: self.minimum_height
+                        row_default_height: 10
+                        id: data_display_grid
+                        do_scroll_x: True
+                        do_scroll_y: True
+                        
+                BoxLayout:
+                    size_hint_y: 0.1
+                    orientation: 'horizontal'
+                    
+                    ActionButton:
+                        icon: 'icons/lc_previouspage.png'
+                        #on_press: root.edit_field()
+                    ActionButton:
+                        icon: 'icons/lc_nextpage.png'
+                        #on_press: root.edit_field()
 
 
         TabbedPanelItem:
             text: _('Execute SQL')
-            Image:
-                source: "kiwi.jpg"
-                allow_stretch: True
-                keep_ratio: False
+            BoxLayout:
+                Label:
+                    text: 'execute sql'
                 
                 
 <fileOpenForm>:
@@ -186,9 +229,16 @@ BoxLayout:
                 icon: 'icons/lc_deleterows.png'
                 on_press: root.remove_field()
 
-        Button:
-            text: _("Create table")
-            size_hint_y: 0.1     
+        
+        BoxLayout:
+            size_hint_y: 0.1
+            orientation: 'horizontal'
+            Button:
+                text: _("Create table")
+                on_press: root.create_table()  
+            Button:
+                text: _("Cancel")
+                on_press: root.dismiss()  
 
 
 <tableField>:
@@ -210,7 +260,7 @@ BoxLayout:
             text: _("Select Type")
             on_release: root.dropdown.open(self)
             size_hint_y: None
-            height: '48dp'
+            height: '40dp'
 
         Label:
             text: _("Not Null:")

@@ -300,7 +300,10 @@ Burada dikkat ederseniz, öncelikle dosya adının olup olmadığına bakılıyo
 işlevi çağrılıyor. Bunu daha önce yazmıştık. Dosya adı yok ise, ``farkliKaydetDialog()`` işlevi çağrılıyor.
 Bunu da "Farklı Kaydet" kesitinde yazmıştık. Çok kolaymış değil mi?
 
-Aç
+
+.. _dosya_ac:
+
+Aç 
 ======
 
 Var olan bir dosyayı açmak için kullanacağımız bu düğme, eğer dikkatli olmazsak başımıza iş açabilir. Sebep?

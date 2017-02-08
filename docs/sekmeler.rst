@@ -1,8 +1,8 @@
 .. _sekmeler:
 
-################################################
-:index:`Sekmeli Panel` (:index:`TabbedPanel`)
-################################################
+################################################################################################
+:index:`Sekmeli Panel` (:index:`TabbedPanel`) ve :index:`Ağaç Görünümü` (:index:`TreeView`)
+################################################################################################
 
 Kivy'de sekmeler, diğer GUI'lerde olduğu gibi bir pencerede birden fazla sayfa görünümünü sunmak için kullanılır. Kivy'de `Sekmeli Panel`
 (`TabbedPanel`) olarak isimlendirilir. Oluşturulduğunda size ön tanımlı olarak ``Default`` sekmesini sunacaktır.
@@ -113,4 +113,86 @@ Burada gördüğünüz gibi ikinci sekemede bir etiket ve bir işlevsiz düğme 
 
    Dört sekmeli panel
 
+Ağaç Görünümü (TreeView)
+=========================
 
+Aslında ağaç görünümüne daha önceden tanış olduk. Dosya açma diyaloğunda (:ref:`dosya_ac`) kullandığımız ``FileChooserListView`` modülünde
+ağaç görünümü kullanılmaktadır. Bir ağaç görünümü şu şekildedir::
+
+  Kök
+   |
+   +--Ebeveyn 1
+   |   |
+   |   +--Çocuk 1 1
+   |   |
+   |   +--Çocuk 1 2
+   |     |
+   |     +--Çocuk 1 2 1
+   |     |
+   |     +--Çocuk 1 2 2
+   |   
+   +--Ebeveyn 2
+       |
+       +--Çocuk 2 1
+       |
+       +--Çocuk 2 2         
+
+Burada her ebeveynin kendi çocuğu vardır. Şimdi böyle bir yapıyı nasıl oluşturacağımıza bakalım. Önce program ile nasıl yapılacağına bakacağız. 
+:numref:`Liste %s <agac1>`'deki programı inceleyin
+
+
+.. literalinclude:: ./programlar/sekmeler/3/main.py
+    :linenos:
+    :caption: main.py
+    :name: agac1
+    :tab-width: 4
+    :language: python
+
+Bir ağaç kökü ``TreeView()`` nesnesi ile oluşturulur. Daha sonra ebeveynler ve çocuklar bu ağaç köküne :index:`add_node` ile eklenir. Eklenen her elemana 
+:index:`düğüm` (:index:`node`) diyoruz. Tüm ebeveynler
+ve çocuklar ağaç köküne eklenir, yani beklendiği gibi, çocuklar önceki ebeveynlerine değil, doğrudan ağaç köküne eklenir, ancak hangi ebeyene ekleneceği,
+``add_node()`` işevinin ikinci argümanı olarak belirtilir. Eğer argüman berlirtilemz ise, doğrudan köke eklenir. Programımızı çalıştırdığımızda 
+:numref:`Şekil %s <sekmeler-agac1Img>`'deki gibi bir görüntü elde ederiz.
+
+
+
+.. _sekmeler-agac1Img:
+
+.. figure:: ./programlar/sekmeler/3/agac1.png
+
+   Ağaç görünümü
+
+Elimizdeki veriseti ile bir ağaç kökünü :numref:`Liste %s <agac2>`'deki gibi doldurabiliriz:
+
+.. literalinclude:: ./programlar/sekmeler/4/main.py
+    :linenos:
+    :caption: main.py
+    :name: agac2
+    :tab-width: 4
+    :language: python
+
+Bu programda ağaç kökünü :index:`hide_root` ile gizlediğimize dikkat ediniz.
+
+Peki seçilen elemana ya da tüm elemanlara nasıl ulaşacağız? Düğümler üzerinde iterasyonu :index:`iterate_all_nodes()` ile yapabiliriz.
+:numref:`Liste %s <agac2>`'deki programdaki 
+elemanlara ulaşmak için önce düzenimize bir düğme ekleyelim. Aşağıdaki kodu ``return`` den hemen önce yazın::
+
+    dgm=Button(text='Elemanları Yaz', size_hint_y=0.2)
+    dgm.bind(on_press=self.elemanlari_yaz)
+    duzen.add_widget(dgm)
+    
+Daha sonra düğmeye tıklandığında çağrılacak olan işlevi yazalım::
+
+    def elemanlari_yaz(self, *args):
+        for eb in self.agac_koku.iterate_all_nodes():
+            print eb.level, eb.text
+            
+Düğmeye tıkladığımızda ekrana elemanların konumları ve elemanlar yazılacaktır.
+
+Eğer seçili olan elemana ulaşmak istiyorsanız :index:`selected_node()` özelliğini kullanabilirsiniz. Aşağıdaki satırı ``elemanlari_yaz()``
+işlevinin sonuna ekleyin ve düğmeye tıklayın::
+
+    if self.agac_koku.selected_node:
+        print "Seçili Eleman", self.agac_koku.selected_node.text
+        
+Eğer önceden bir düğümü açılı yapmak istiyorsanız :index:`select_node` özelliğini kullanabilirsiniz. Örneğin

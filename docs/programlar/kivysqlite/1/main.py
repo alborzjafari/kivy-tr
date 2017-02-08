@@ -28,9 +28,30 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
+from kivy.uix.textinput import TextInput
 
 def _(*args):
     return App.get_running_app().get_text(*args)
+ 
+ 
+ 
+Builder.load_string("""
+<LabelB>:
+  bcolor: 1, 1, 1, 1
+  
+  canvas.before:
+    Color:
+      rgba: self.bcolor
+    Rectangle:
+      pos: self.pos
+      size: self.size
+""")
+
+class LabelB(Label):
+    def __init__(self,**kwargs):
+        super(LabelB,self).__init__(**kwargs)
+        self.bcolor = kwargs['bcolor']
+ 
  
  
 class fileOpenForm(Popup):
@@ -44,11 +65,12 @@ class tableField(Popup):
         self.fi=-1
         if kwargs.has_key('fi'):
             self.fi=kwargs['fi']
-        self.dropdown = DropDown()
+        
         self.ids.field_pk.disabled=False
         self.ids.field_ai.disabled=False
+        self.dropdown = DropDown()
         for typ in TYPES:
-            btn = Button(text=typ, size_hint_y=None, height=25)
+            btn = Button(text=typ, size_hint_y=None, height=20)
             self.dropdown.add_widget(btn)
             btn.bind(on_release=lambda btn: self.dropdown.select(btn.text))
             
@@ -88,8 +110,15 @@ class tableField(Popup):
         field_pk=self.ids.field_pk.active
         field_ai=self.ids.field_ai.active
 
-        if field_ai: field_pk=True
+
+        #if this is auto increment field, then make pk is false for others.
+        if field_ai: 
+            field_pk=True
+            for f in self.myparent.fields:
+                f[3]=False
         
+        
+        #check if field name exists
         f_exist=False
         
         if self.fi == -1:
@@ -108,22 +137,19 @@ class tableField(Popup):
             popup.open()
             
         else:
-            ft=(field_name, field_type, field_not, field_pk, field_ai)
+            ft=[field_name, field_type, field_not, field_pk, field_ai]
             if self.fi == -1:
                 self.myparent.fields.append(ft)
             else:
                 self.myparent.fields[self.fi]=ft
             self.dismiss()
             
-            
-
-            
             self.myparent.update_list()
  
  
 class newTableForm(Popup):
     def __init__(self,**kwargs):
-        #self.parent=kwargs['parent']
+        self.myparent=kwargs['me']
         super(newTableForm,self).__init__(**kwargs)
         self.fields=[]
         self.update_list()
@@ -169,11 +195,9 @@ class newTableForm(Popup):
         
         
     def update_list(self):
-        chlist=[]
-        for c in self.ids.table_fields.children:
-            chlist.append(c)
+        
             
-        for cx in chlist[:]:
+        for cx in  self.ids.table_fields.children[:]:
             self.ids.table_fields.remove_widget(cx)
        
         for header in (_("Selection"), _("Name"), _("Type"), _("Not"), _("PK"), _("AI")):
@@ -190,10 +214,45 @@ class newTableForm(Popup):
             self.ids.table_fields.add_widget(Label(text= '√' if f[4] else ''))
 
             
- 
- 
- 
+    def create_table(self):
 
+        if (not self.fields) or (not self.ids.new_table_name.text):
+            popup = Popup(title=_('Warning !'), content=Label(text=_("Table name or field does not exist.")), size_hint = (0.5,0.4) )
+            popup.open()
+ 
+        else:
+            pk_list=[]
+            for f in self.fields:
+                if f[4]:
+                    pk_list=[]
+                    break
+                if f[3]: pk_list.append('`'+f[0]+'`')
+                   
+                    
+            sql_lines=[]
+            for f in self.fields:
+                sl='   `%s` %s %s' % ( f[0],
+                                      f[1],
+                                      ' NOT NULL' if f[2] else '' )
+                if not pk_list:
+                    sl += '%s %s' % (' PRIMARY KEY' if f[3] else '',
+                                     ' AUTOINCREMENT' if f[4] else '')
+                                     
+                
+                sql_lines.append(sl)
+                
+            if pk_list:
+                sl = '    PRIMARY KEY( %s )' % ', '.join(pk_list)
+                sql_lines.append(sl)
+                
+            sql_query='CREATE TABLE `%s` (\n' % self.ids.new_table_name.text + ',\n'.join(sql_lines) + '\n)\n'
+            
+            print sql_query
+            
+            self.myparent.cursor.execute(sql_query)
+            self.myparent.update_tables_tree()
+            self.dismiss()
+            
 class ConfirmPopup(Popup):
     def __init__(self,**kwargs):
         self.text= kwargs['text']
@@ -212,14 +271,15 @@ class KivySQLiteApp(App):
     def build(self):
         self.recent_path=os.getcwd()
         self.cursor=None
-        self.set_language('tr')
+        self.set_language('en')
         self.conn=None
+        self.table_dropdown = DropDown()
         return Builder.load_file('main.kv')
           
           
           
     def newTableForm(self):
-        popup=newTableForm(title=_("Create New Table"))
+        popup=newTableForm(title=_("Create New Table"), me=self)
         popup.open()
           
           
@@ -236,7 +296,12 @@ class KivySQLiteApp(App):
         form.open()
 
 
+   
+
+
     def openDB(self, db_select):
+
+        self.closeDB()
 
         try: 
             self.conn = lite.connect(db_select.selection[0])
@@ -257,11 +322,15 @@ class KivySQLiteApp(App):
     
             self.root.ids.table_tree.remove_node(node)
     
+        self.table_dropdown = DropDown()
         if self.conn:
             for typ in ('table','view'):
                 self.cursor.execute("SELECT name FROM sqlite_master WHERE type = '%s'" % typ)
                 result=self.cursor.fetchall()
                 if result:
+                
+                
+                
                     tvlabeltext='{0} ({1})'.format( _(typ.title()+'s'), len(result) )
                     tvlabel=TreeViewLabel(text=tvlabeltext)
                     parent_node=self.root.ids.table_tree.add_node(tvlabel)
@@ -273,13 +342,50 @@ class KivySQLiteApp(App):
                         
                         self.cursor.execute('PRAGMA TABLE_INFO(`%s`)' % tb[0])
                         
+                        #populate dropdown list in browse data tab. 
+                        if not tb[0]=='sqlite_sequence':     
+                            btn = Button(text=tb[0], size_hint_y=None, height=20)
+                            self.table_dropdown.add_widget(btn)
+                            btn.bind(on_release=lambda btn: self.table_dropdown.select(btn.text))
+      
                         for field in self.cursor.fetchall():
                             tvlabeltext='[b]{0}[/b]    {1}'.format( field[1], field[2] )
                             tvlabel=TreeViewLabel(text=tvlabeltext, markup=True)               
                             self.root.ids.table_tree.add_node(tvlabel, tb_node)
 
+            self.table_dropdown.bind(on_select=self.set_browse_data_main_button_text)
+          
+    def set_browse_data_main_button_text(self, instance, x):
+        self.root.ids.browse_data_main_button.text=x
+        self.update_data_display_grid(x)
+          
+    def update_data_display_grid(self, table=None):
+        for cx in  self.root.ids.data_display_grid.children[:]:
+            self.root.ids.data_display_grid.remove_widget(cx)
+        if table:
+            self.cursor.execute("SELECT rowid, * FROM `%s`" % table)
+            self.root.ids.data_display_grid.cols=len(self.cursor.description)-1
+
+            for cn in self.cursor.description[1:]:
+                self.root.ids.data_display_grid.add_widget(Label(text="[b]%s[/b]" % cn[0], markup=True, size_hint=( None, None)))
+            result=self.cursor.fetchmany(20)
+            self.root.ids.data_display_grid.bind(minimum_width=self.root.ids.data_display_grid.setter('width'))
+            for i, r in enumerate(result):
+                for j,c in enumerate(r[1:]):
+ 
                     
-            
+                    t=TextInput(text=str(c),size_hint= (None, None), size=(200,30), multiline=False)
+                    t.tablename=table
+                    t.rowid=r[0]
+                    t.fieldname=self.cursor.description[j+1][0]
+                    t.bind(on_text_validate=self.metin)
+                    self.root.ids.data_display_grid.add_widget(t)
+        
+        
+    def metin(self, textinput):
+        self.cursor.execute('UPDATE `%s` SET `%s`="%s" WHERE rowid=%d' % (textinput.tablename, textinput.fieldname, textinput.text,textinput.rowid))
+        self.conn.commit()
+        
         
     def deleteTableDialog(self):
         tb=self.root.ids.table_tree.selected_node
@@ -296,7 +402,8 @@ class KivySQLiteApp(App):
             self.conn=None
             self.update_tables_tree()
             self.root.ids.delete_table_action.disabled=True
-            
+            self.root.ids.new_table_action.disabled=True
+        
         
     def tree_view_expanded(self):
         pass
