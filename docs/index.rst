@@ -22,7 +22,8 @@ Kivy Mobil Programlama
    resimGosterici
    listeEylem
    sekmeler
-.. sqltebrowser
+   pencereyoneticisi
+.. sqlitebrowser
 
 
 Dizinler ve Tablolar
