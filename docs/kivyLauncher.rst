@@ -13,8 +13,8 @@ belirli bir olgunluğa eriştikten sonra yapmaktır. Her yaptığınız değişi
 getirmek ve bunu android cihaza kurup çaluıştırmak, Python'un genel felsefesine aykırıdır. Bu bölümde programınızı
 derlemenden, doğrudan kaynak kodu kullanarak çalıştırmanın yolunu anlatacağız.
 
-Kivy Programlarını Android'de Çalıştırma
-========================================
+Kivy Launcher Kurulumu
+======================
 
 Python/Kivy ile yazılmış programların derlenmeden doğrudan Android üzerinde çalışmasınız sağlayacak bir
 yorumluyuca ihtiyacımız olacak. Tıpkı Python yorumlayıcısı gibi. Android üzerinde kullanabileceğiniz
@@ -36,7 +36,15 @@ sırada çıkan sonuç :numref:`Şekil %s <kivylauncher1Img>` 'de görülmektedi
 
 
 
-"Yükle" düğmesine tıklayın ve kurulumu tamamlayın. Programınızı çalıştırmak için SD karınızda ``kivy`` adlı
+"Yükle" düğmesine tıklayın ve kurulumu tamamlayın.
+
+
+Kivy Launcher'a Uygulama Eklenmesi
+==================================
+
+
+Kivy Launcher birden fazla uygulamayı bailatablir. 
+Bir programı çalıştırmak için SD karınızda ``kivy`` adlı
 bir klasör oluşturmanız, bu klasörün içerisinde uygulamınızı kaydetmeniz gerekmektedir. uygulama klasöründe
 ``android.txt`` isimli dosyayı şu şekilde oluşturmalısınız:
 
@@ -70,6 +78,9 @@ Yaptığımız işlem Windows'da 'deki gibi görünecektir.
 .. figure:: ./resimler/kivylauncher/kivylauncher2Img.png
 
    Kivy Launcher'a Uygulama Eklenmesi
+
+Kivy Launcher'da Uygulamanın Başlatılması
+=========================================
 
 Android cihazınızda `Kivy Launcher` uygulamasını başlattığınızda:
 
