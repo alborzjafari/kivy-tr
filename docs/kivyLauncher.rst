@@ -4,19 +4,22 @@
 Andoid'de Çalıştırma: :index:`Kivy Launcher`
 #####################################################
 
-Kivy ile uygulamaları çoğunun mobil cihazlarda çalıştırmak için geliştirilir. Peki Windows yada Linux üzerinde
-gelişrtirdiğimiz programları Android üzerinde nasıl çalıştıracağız? Bunun bilinen yolu apk paketi oluştrmaktır.
-Yazdığınız programları apk paketi haline getirmeyi  Bölüm :ref:`paketleme` de anlatacağız.
+Kivy ile uygulamalar çoğunlukla mobil cihazlarda çalıştırmak için geliştirilir. Peki Windows yada Linux üzerinde
+gelişrtirdiğimiz programları Android üzerinde nasıl çalıştıracağız? Bunun bilinen yolu `apk` paketi oluştrmaktır.
+Yazdığınız programları `apk` paketi haline getirmeyi  Bölüm :ref:`paketleme` de anlatacağız.
 
-Paketleme bölümünde anlatacağımız apk paketi yapmak olduçka zahmetli ve uzun bir işlemdir. Bunu en iyi programınız
+Paketleme bölümünde anlatacağımız `apk` paketi yapmak olduçka zahmetli ve uzun bir işlemdir. Paketleme işini
+en doğrusu programınız
 belirli bir olgunluğa eriştikten sonra yapmaktır. Her yaptığınız değişiklikte programı derleyip paket haline
-getirmek ve bunu android cihaza kurup çaluıştırmak, Python'un genel felsefesine aykırıdır. Bu bölümde programınızı
+getirmek ve bunu android cihaza kurup çaluıştırmak, Python'un genel mantığına aykırıdır. Yorulmalamalı 
+bir dil ile yazdığınız programları derleyip çalıştırmak :(
+Bu bölümde programınızı
 derlemenden, doğrudan kaynak kodu kullanarak çalıştırmanın yolunu anlatacağız.
 
 Kivy Launcher Kurulumu
 ======================
 
-Python/Kivy ile yazılmış programların derlenmeden doğrudan Android üzerinde çalışmasınız sağlayacak bir
+Python/Kivy ile yazılmış programların derlenmeden doğrudan Android üzerinde çalışmasını sağlayacak bir
 yorumluyuca ihtiyacımız olacak. Tıpkı Python yorumlayıcısı gibi. Android üzerinde kullanabileceğiniz
 QPython işinizi görmeyecektir, çünkü QPython SL4A mekanızması ile çalışır. Kivy ve diğer eklentileri
 kurmanız ve içermeniz mümkün değildir. `Kivy Launcher` bu amaçla hazırlanmış bir Python/Kivy
@@ -45,7 +48,8 @@ Kivy Launcher'a Uygulama Eklenmesi
 
 Kivy Launcher birden fazla uygulamayı bailatablir. 
 Bir programı çalıştırmak için SD karınızda ``kivy`` adlı
-bir klasör oluşturmanız, bu klasörün içerisinde uygulamınızı kaydetmeniz gerekmektedir. uygulama klasöründe
+bir klasör oluşturmanız, uygulamanızı bu klasörün içerisinde bir klasöre kaydetmeniz gerekmektedir. Bu lkasöre
+`uygulama klasörü` diyeceğiz. Uygulama klasöründe
 ``android.txt`` isimli dosyayı şu şekilde oluşturmalısınız:
 
 ::
@@ -79,6 +83,11 @@ Yaptığımız işlem Windows'da 'deki gibi görünecektir.
 
    Kivy Launcher'a Uygulama Eklenmesi
 
+
+`Kivy Launcher` uygualama kalsöründeki ``main.py`` programını çalıştıracaktır. Bu nedenlen şimdiye kadar
+tüm programlarımızı ``main.py`` olarak kaydettik. Benzer şekilde `apk` paketi yapacağınız uygualamanın
+ana programı da `main.py` olacaktır.
+
 Kivy Launcher'da Uygulamanın Başlatılması
 =========================================
 
@@ -92,14 +101,14 @@ Android cihazınızda `Kivy Launcher` uygulamasını başlattığınızda:
    Kivy Launcher'da Uygulamalar
 
 
-görünecektir. Iygalamı seçiğ başlatırsanız:
+görünecektir. Uygulamıyı seçip başlatabilirsinz:
 
 
 .. _kivylauncher4Img:
 
 .. figure:: ./resimler/kivylauncher/kivylauncher4Img.png
 
-   Kivy Launcher'da uygulamanın Çalışması
+   Kivy Launcher'da Uygulamanın Çalışması
 
 Eğer koduzunda bir hata oluşursa `CatLog` isimli uygulamaya `root` yetkisi vererek görebilirsiniz.
 Benim terchim Linux'da ``adb logcat`` komutunu kullanmaktır.
