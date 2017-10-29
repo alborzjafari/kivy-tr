@@ -11,8 +11,8 @@ Yazdığınız programları `apk` paketi haline getirmeyi  Bölüm :ref:`paketle
 Paketleme bölümünde anlatacağımız `apk` paketi yapmak olduçka zahmetli ve uzun bir işlemdir. Paketleme işini
 en doğrusu programınız
 belirli bir olgunluğa eriştikten sonra yapmaktır. Her yaptığınız değişiklikte programı derleyip paket haline
-getirmek ve bunu android cihaza kurup çaluıştırmak, Python'un genel mantığına aykırıdır. Yorulmalamalı 
-bir dil ile yazdığınız programları derleyip çalıştırmak :(
+getirmek ve bunu android cihaza kurup çalıştırmak, Python'un genel mantığına aykırıdır. Yorulmalamalı 
+bir dil ile yazdığınız programları derleyip çalıştırmak, yorumlamalı dillerin en büyük avantajını geri plana itmek sayılır.
 Bu bölümde programınızı
 derlemenden, doğrudan kaynak kodu kullanarak çalıştırmanın yolunu anlatacağız.
 
@@ -20,7 +20,7 @@ Kivy Launcher Kurulumu
 ======================
 
 Python/Kivy ile yazılmış programların derlenmeden doğrudan Android üzerinde çalışmasını sağlayacak bir
-yorumluyuca ihtiyacımız olacak. Tıpkı Python yorumlayıcısı gibi. Android üzerinde kullanabileceğiniz
+yorumlayıcıya ihtiyacımız olacak. Tıpkı Python yorumlayıcısı gibi. Android üzerinde kullanabileceğiniz
 QPython işinizi görmeyecektir, çünkü QPython SL4A mekanızması ile çalışır. Kivy ve diğer eklentileri
 kurmanız ve içermeniz mümkün değildir. `Kivy Launcher` bu amaçla hazırlanmış bir Python/Kivy
 yorumalyıcısıdır. Üstelik birçok Python paketini de içermektedir. Örneğin 
@@ -46,9 +46,9 @@ Kivy Launcher'a Uygulama Eklenmesi
 ==================================
 
 
-Kivy Launcher birden fazla uygulamayı bailatablir. 
+Kivy Launcher birden fazla uygulamayı başlatablir. 
 Bir programı çalıştırmak için SD karınızda ``kivy`` adlı
-bir klasör oluşturmanız, uygulamanızı bu klasörün içerisinde bir klasöre kaydetmeniz gerekmektedir. Bu lkasöre
+bir klasör oluşturmanız, uygulamanızı bu klasörün içerisinde bir klasöre kaydetmeniz gerekmektedir. Bu klasöre
 `uygulama klasörü` diyeceğiz. Uygulama klasöründe
 ``android.txt`` isimli dosyayı şu şekilde oluşturmalısınız:
 
@@ -58,7 +58,7 @@ bir klasör oluşturmanız, uygulamanızı bu klasörün içerisinde bir klasör
     author=Yazar Adi Soaydi
     orientation=portrait
     
-`orientation` parametresi ``portrait`` (dikey) yada ``landscape`` (yatay) olabilir.
+`orientation` parametresi ``portrait`` (dikey) yada ``landscape`` (yatay) değerini alabilir.
 
 Şimdi :ref:`olaylarBolumu` Bölümünde yazdığımız programı (:numref:`olaylar_main6`) 
 ve ilgili kv dosyasını (:numref:`olaylar_kv6` kullanarak) ``olayuyg.kv`` `Kivy Launcher`'da çalıştıralım.
@@ -74,7 +74,7 @@ kopyalayın. Bu klasörde `android.txt` isimli dosyayı ben şu şekilde oluştu
     orientation=portrait
 
 
-Yaptığımız işlem Windows'da 'deki gibi görünecektir.
+Yaptığımız işlem Windows'da :numref:`Şekil %s <kivylauncher2Img>`'deki gibi görünecektir.
 
 
 .. _kivylauncher2Img:
@@ -84,7 +84,7 @@ Yaptığımız işlem Windows'da 'deki gibi görünecektir.
    Kivy Launcher'a Uygulama Eklenmesi
 
 
-`Kivy Launcher` uygualama kalsöründeki ``main.py`` programını çalıştıracaktır. Bu nedenlen şimdiye kadar
+`Kivy Launcher` uygualama kalsöründeki ``main.py`` programını çalıştıracaktır. Bu nedenle şimdiye kadar
 tüm programlarımızı ``main.py`` olarak kaydettik. Benzer şekilde `apk` paketi yapacağınız uygualamanın
 ana programı da `main.py` olacaktır.
 
@@ -110,5 +110,5 @@ görünecektir. Uygulamıyı seçip başlatabilirsinz:
 
    Kivy Launcher'da Uygulamanın Çalışması
 
-Eğer koduzunda bir hata oluşursa `CatLog` isimli uygulamaya `root` yetkisi vererek görebilirsiniz.
-Benim terchim Linux'da ``adb logcat`` komutunu kullanmaktır.
+Eğer koduzunun çalıştırılamsı sırasındaki hataları görmek istiyordanız, `CatLog` isimli uygulamaya `root` yetkisi
+vererek görebilirsiniz. Benim terchim Linux'da ``adb logcat`` komutunu kullanmaktır.
