@@ -74,7 +74,7 @@ Bir dosyayı kaydetmek için, öncelikle kaydedilecek klasörün belirtilmesi ve
 girilmesi gerekir. Eğer kullanıcıya basitçe bir metin kurtusu sağlayıp buraya dosyanın tam patikasını yazmasını
 isterseniz (örneğin ``C:\dosyalarım\odevlerim\fizik\newton.txt`` şeklinde), kusura bakmayın ama programınızı
 kimse kullanmaz. 1990'lı yıllarda olsaydınız buna kimse itirtaz etmezdi ancak şimdi GUI (Grafik Kullanıcı Arayüzü)
-icat edildi. O halde klasörler arasında gezinti yapabilecek bir arayüze ihtiyacımız var. Bun kendiniz yapabilirsiniz.
+icat edildi. O halde klasörler arasında gezinti yapabilecek bir arayüze ihtiyacımız var. Bunu kendiniz yapabilirsiniz.
 Nasıl mı? ``os.listdir()``'i biliyorsunuz. Her bir elemanı ızgara düzenine bir düğme olarak yerleştirip gezinti
 sağlayabilirsiniz. Ama bunu yapmayın. Çünkü Kivy geliştiricileri bizim için daha iyisini yapmış:
 :index:`FileChooserListView`. Bu grafik parçacığı bize dizinler arası gezinti yapmamızı sağlayacak bir araç
